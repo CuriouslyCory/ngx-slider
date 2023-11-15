@@ -18,14 +18,12 @@
             "main": "src/demo-app/main.ts",
             "polyfills": "src/demo-app/polyfills.ts",
             "tsConfig": "src/demo-app/tsconfig.app.json",
-            "assets": [
-              "src/demo-app/favicon.ico",
-              "src/demo-app/assets"
-            ],
+            "assets": ["src/demo-app/favicon.ico", "src/demo-app/assets"],
             "styles": [
               "src/demo-app/styles.scss",
               "src/demo-app/docs-styles.scss"
             ],
+            "inlineStyleLanguage": "scss",
             "scripts": [],
             "aot": false,
             "vendorChunk": true,
@@ -76,7 +74,11 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/demo-app/test.ts",
-            "polyfills": ["zone.js", "zone.js/testing", "src/demo-app/polyfills.ts"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing",
+              "src/demo-app/polyfills.ts"
+            ],
             "tsConfig": "src/demo-app/tsconfig.spec.json",
             "karmaConfig": "src/demo-app/karma.conf.js",
             "styles": [
@@ -84,10 +86,7 @@
               "src/demo-app/docs-styles.scss"
             ],
             "scripts": [],
-            "assets": [
-              "src/demo-app/favicon.ico",
-              "src/demo-app/assets"
-            ]
+            "assets": ["src/demo-app/favicon.ico", "src/demo-app/assets"]
           }
         }
       }
