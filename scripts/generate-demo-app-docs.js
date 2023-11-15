@@ -31,12 +31,11 @@ async function generateTypedocDocs(typedocDocsDir) {
   utils.copyReadmeMd(apiDocsReadmeFile);
 
   const app = await typedoc.Application.bootstrapWithPlugins({
-    entryPoints: ["src/ngx-slider/lib/public_api.ts"],
+    entryPoints: ["./src/ngx-slider/lib/public_api.ts"],
   });
 
-  app.options.addReader(new typedoc.TSConfigReader());
-
   const project = await app.convert();
+  console.log("project", project);
   if (project) {
     await app.generateDocs(project, typedocDocsDir);
     // HACK: restore the README.md to original
@@ -187,11 +186,14 @@ generateTypedocDocs(typedocDocsDir)
       __dirname,
       "../src/demo-app/app/docs"
     );
+    console.log("Demo app docs module dir", demoAppDocsModuleDir);
     rimraf.sync(demoAppDocsModuleDir);
     mkdirp.sync(demoAppDocsModuleDir);
     const typedocHtmlFiles = utils
       .readdirRecursivelySync(typedocDocsDir)
       .filter((file) => file.endsWith(".html"));
+    console.log("typedocDocsDir", typedocDocsDir);
+    console.log("typedocHtmlFiles", typedocHtmlFiles);
 
     const componentsMetadata = [];
 
@@ -207,6 +209,7 @@ generateTypedocDocs(typedocDocsDir)
       );
       componentsMetadata.push(componentMetadata);
     }
+    console.log("componentsMetadata", componentsMetadata);
     generateModuleFile(componentsMetadata, demoAppDocsModuleDir);
   })
   .catch(console.error);

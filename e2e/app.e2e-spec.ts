@@ -1,14 +1,14 @@
-import { AppPage } from './app.po';
+import { AppPage } from "./app.po";
 
-describe('demo app', () => {
+describe("demo app", () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it("should display welcome message", async () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toBe('ngx-slider');
+    expect(await page.getParagraphText()).toBe("ngx-slider");
   });
 });
