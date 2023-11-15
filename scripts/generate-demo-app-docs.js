@@ -21,14 +21,6 @@ const utils = require('./utils.js');
  * The resulting files are not really useful on their own; they will be used later to generate demo app code
  */
 async function generateTypedocDocs(typedocDocsDir) {
-  // const publicApiConfigFile = path.resolve(__dirname, '../src/ngx-slider/lib/public_api.json');
-  // const publicApiConfig = JSON.parse(fs.readFileSync(publicApiConfigFile, { encoding: 'utf8' }));
-
-  // // const files = publicApiConfig.exports
-  // //   .map(exportDef => path.resolve(__dirname, `../src/ngx-slider/lib/${exportDef.file}.ts`));
-
-  const themeDir = path.resolve(__dirname, '../typedoc-theme');
-
   // HACK: When Typedoc finds a README.md file, it uses it to generate content for the index page of documentation
   // This is not very helpful, as it repeats the same stuff that's already shown on Github and NPM
   // So instead, replace the README.md with our own file
@@ -36,28 +28,19 @@ async function generateTypedocDocs(typedocDocsDir) {
   utils.copyReadmeMd(apiDocsReadmeFile);
 
 
-  const app = new typedoc.Application();
+  const app = await typedoc.Application.bootstrapWithPlugins({
+    entryPoints: ["src/ngx-slider/lib/public_api.ts"],
+  });
+
   app.options.addReader(new typedoc.TSConfigReader());
-  // app.options.({paths: {"@local/ngx-slider": ["src/ngx-slider/lib/public_api.ts"]}})
-  // console.log(app.options.setCompilerOptions({paths: {"@local/ngx-slider": ["src/ngx-slider/lib/public_api.ts"]}}));
 
-  // const app = new typedoc.Application({
-  //   module: 'commonjs',
-  //   target: 'es6',
-  //   includeDeclarations: false,
-  //   experimentalDecorators: true,
-  //   excludeExternals: true,
-  //   theme: themeDir
-  // });
-  app.bootstrap({
-    entryPoints:['src/ngx-slider/lib/public_api.ts'],
-  })
-  const project = app.convert();
-  await app.generateDocs(project,typedocDocsDir );
-  // HACK: restore the README.md to original
-  const mainReadmeFile = path.resolve(__dirname, '../README.md');
-  utils.copyReadmeMd(mainReadmeFile);
-
+  const project = await app.convert();
+  if(project){
+    await app.generateDocs(project, typedocDocsDir);
+    // HACK: restore the README.md to original
+    const mainReadmeFile = path.resolve(__dirname, '../README.md');
+    utils.copyReadmeMd(mainReadmeFile);
+  }
 }
 
 /** Convert typedoc HTML file into Angular component for use in demo app */
